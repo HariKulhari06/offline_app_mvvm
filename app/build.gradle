@@ -1,0 +1,78 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "com.example.employee"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            buildConfigField("String", "BASE_URL", "\"http://dummy.restapiexample.com/api/v1\"")
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "BASE_URL", "\"http://dummy.restapiexample.com/api/v1\"")
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompat"
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.ext.constraintlayout"
+    implementation "com.google.android.material:material:$rootProject.ext.material"
+
+
+    // dependencies for lifecycle
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.ext.lifecycle"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+
+    // reactive
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjava2Version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
+
+
+
+    // Dagger core
+    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
+
+    // Dagger Android
+    annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
+    // if you are not using support library, include this instead
+    implementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
+
+    // Room Database
+    implementation "android.arch.persistence.room:runtime:$project.androidArchVersion"
+    implementation "android.arch.persistence.room:rxjava2:$project.androidArchVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:$project.androidArchVersion"
+
+
+    // parser
+    implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+
+    // network
+    implementation "com.amitshekhar.android:rx2-android-networking:$rootProject.rx2FastAndroidNetworking"
+
+
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+}

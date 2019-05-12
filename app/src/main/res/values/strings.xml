@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Employee</string>
+    <string name="action_settings">Settings</string>
+    <string name="salary">salary</string>
+    <string name="employee_age">Employee Age</string>
+    <string name="employee_id">Employee ID</string>
+</resources>
