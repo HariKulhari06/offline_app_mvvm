@@ -20,7 +20,7 @@ import com.example.employee.view.detial.EmployeeDetailActivity;
 
 import javax.inject.Inject;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewModel> implements MainNavigator, EmployeeAdapter.EmployeeAdapterListner {
+public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewModel> implements MainNavigator, EmployeeAdapter.EmployeeAdapterListener {
     @Inject
     MainViewModel viewModel;
 
@@ -57,11 +57,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     }
 
     private void initViews() {
+
+        binding.setLifecycleOwner(this);
+
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         binding.contentMain.recyclerView.setLayoutManager(layoutManager);
         binding.contentMain.recyclerView.setItemAnimator(new DefaultItemAnimator());
         binding.contentMain.recyclerView.setAdapter(adapter);
-        adapter.setListner(this);
+        adapter.setListener(this);
 
         viewModel.getListLiveData().observe(this, employees -> adapter.submitList(employees));
 

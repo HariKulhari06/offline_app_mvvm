@@ -41,12 +41,14 @@ public class EmployeeDetailActivity extends BaseActivity<ActivityEmployeeDetialB
         super.onCreate(savedInstanceState);
         viewModel.setNavigator(this);
         binding = getViewDataBinding();
+        binding.setLifecycleOwner(this);
 
         setSupportActionBar(binding.toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Hari");
         binding.toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
     }
 
 
