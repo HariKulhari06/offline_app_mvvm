@@ -3,6 +3,8 @@ package com.example.employee.data.remote;
 import com.example.employee.data.local.model.Employee;
 import com.rx2androidnetworking.Rx2AndroidNetworking;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,10 +33,18 @@ public class AppApiHelper implements ApiHelper {
 
     @Override
     public Single<Employee> updateEmployeeAtServer(Employee employee) {
-        return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_UPDATE_EMPLOYEES)
+        return Rx2AndroidNetworking.put(ApiEndPoint.ENDPOINT_UPDATE_EMPLOYEES+ "/" + employee.id)
                 .addBodyParameter(employee)
                 .build()
                 .getObjectSingle(Employee.class);
+    }
+
+    @Override
+    public Single<JSONObject> deleteEmployeeFromServer(String id) {
+        return Rx2AndroidNetworking.delete(ApiEndPoint.ENDPOINT_DELETE_EMPLOYEE + "/" + id)
+                .addQueryParameter(id)
+                .build()
+                .getJSONObjectSingle();
     }
 
 

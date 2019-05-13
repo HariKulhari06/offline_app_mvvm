@@ -3,6 +3,8 @@ package com.example.employee;
 import android.app.Activity;
 import android.app.Application;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.interceptors.HttpLoggingInterceptor;
 import com.example.employee.data.DataManager;
 import com.example.employee.data.local.model.Employee;
 import com.example.employee.di.componets.DaggerAppComponent;
@@ -30,6 +32,11 @@ public class App extends Application implements HasActivityInjector {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        AndroidNetworking.initialize(getApplicationContext());
+        if (BuildConfig.DEBUG) {
+            AndroidNetworking.enableLogging(HttpLoggingInterceptor.Level.BODY);
+        }
 
         DaggerAppComponent.builder().application(this).build().inject(this);
 

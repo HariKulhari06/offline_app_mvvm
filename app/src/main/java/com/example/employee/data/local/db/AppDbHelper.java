@@ -1,14 +1,15 @@
 package com.example.employee.data.local.db;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.employee.data.local.model.Employee;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public class AppDbHelper implements DbHelper {
@@ -24,6 +25,11 @@ public class AppDbHelper implements DbHelper {
     @Override
     public LiveData<List<Employee>> getEmployeesLiveData() {
         return appDatabase.employeeDao().getEmployeesLiveData();
+    }
+
+    @Override
+    public Observable<LiveData<List<Employee>>> searchEmployee(String text) {
+        return Observable.fromCallable(() -> appDatabase.employeeDao().getEmployeesLiveData(text));
     }
 
     @Override

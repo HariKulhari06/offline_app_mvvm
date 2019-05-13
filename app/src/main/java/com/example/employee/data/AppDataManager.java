@@ -3,16 +3,18 @@ package com.example.employee.data;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.employee.data.local.db.DbHelper;
 import com.example.employee.data.local.model.Employee;
 import com.example.employee.data.remote.ApiHelper;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public class AppDataManager implements DataManager {
@@ -32,6 +34,11 @@ public class AppDataManager implements DataManager {
     @Override
     public LiveData<List<Employee>> getEmployeesLiveData() {
         return mDbHelper.getEmployeesLiveData();
+    }
+
+    @Override
+    public Observable<LiveData<List<Employee>>> searchEmployee(String text) {
+        return mDbHelper.searchEmployee(text);
     }
 
     @Override
@@ -87,5 +94,10 @@ public class AppDataManager implements DataManager {
     @Override
     public Single<Employee> updateEmployeeAtServer(Employee employee) {
         return mApiHelper.updateEmployeeAtServer(employee);
+    }
+
+    @Override
+    public Single<JSONObject> deleteEmployeeFromServer(String id) {
+        return mApiHelper.deleteEmployeeFromServer(id);
     }
 }

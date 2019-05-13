@@ -20,8 +20,8 @@
 
 package com.example.employee.utils.rx;
 
-import android.widget.SearchView;
 
+import androidx.appcompat.widget.SearchView;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 

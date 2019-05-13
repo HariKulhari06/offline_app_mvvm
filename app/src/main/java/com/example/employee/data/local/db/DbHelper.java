@@ -1,17 +1,19 @@
 package com.example.employee.data.local.db;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.employee.data.local.model.Employee;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public interface DbHelper {
 
     LiveData<List<Employee>> getEmployeesLiveData();
+
+    Observable<LiveData<List<Employee>>> searchEmployee(String text);
 
     LiveData<Employee> getEmployeeLiveData(String id);
 

@@ -52,6 +52,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = getViewDataBinding();
+        setSupportActionBar(binding.toolbar);
+
         viewModel.setNavigator(this);
         initViews();
     }
@@ -66,25 +68,26 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         binding.contentMain.recyclerView.setAdapter(adapter);
         adapter.setListener(this);
 
-        viewModel.getListLiveData().observe(this, employees -> adapter.submitList(employees));
+        startListening();
+
+        viewModel.setUpSearchObservable(this, MainActivity.this, binding.searchView);
 
         binding.contentMain.swipeRefreshLayout.setOnRefreshListener(() -> viewModel.refresh());
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu);
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView =
-                (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
 
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -98,9 +101,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     }
 
     @Override
+    public void startListening() {
+        viewModel.getListLiveData().observe(this, employees -> adapter.submitList(employees));
+    }
+
+    @Override
     public void onItemClick(Employee employee) {
         Intent intent = new Intent(this, EmployeeDetailActivity.class);
-        intent.putExtra("id", employee.id);
+        intent.putExtra("emp", employee);
         startActivity(intent);
     }
 }
