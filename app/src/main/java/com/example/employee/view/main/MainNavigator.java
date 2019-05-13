@@ -4,4 +4,6 @@ public interface MainNavigator {
     void handleError(Throwable throwable);
 
     void startListening();
+
+    void setRefresh(boolean refresh);
 }

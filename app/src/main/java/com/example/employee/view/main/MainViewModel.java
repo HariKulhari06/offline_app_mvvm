@@ -26,7 +26,6 @@ public class MainViewModel extends BaseViewModel<MainNavigator> {
 
     private LiveData<List<Employee>> listLiveData;
 
-
     public MainViewModel(DataManager dataManager, SchedulerProvider schedulerProvider) {
         super(dataManager, schedulerProvider);
         listLiveData = getDataManager().getEmployeesLiveData();
@@ -41,8 +40,8 @@ public class MainViewModel extends BaseViewModel<MainNavigator> {
         getCompositeDisposable().add(getDataManager().getEmployeesFromServer()
                 .flatMap((Function<List<Employee>, SingleSource<?>>) employees -> getDataManager().insertEmployees(employees)).subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(o -> setIsLoading(false), throwable -> {
-                    setIsLoading(false);
+                .subscribe(o -> getNavigator().setRefresh(false), throwable -> {
+                    getNavigator().setRefresh(false);
                     getNavigator().handleError(throwable);
                 }));
     }

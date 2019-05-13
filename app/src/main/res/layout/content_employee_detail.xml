@@ -6,6 +6,9 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+
         <variable
             name="viewModel"
             type="com.example.employee.view.detial.EmployeeDetailViewModel" />
@@ -40,13 +43,14 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.6" />
 
-        <TextView
-            android:id="@+id/textViewEmployeeName"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/editTextEmployeeName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginBottom="16dp"
+            android:enabled="@{viewModel.isEdit()}"
             android:maxWidth="200dp"
             android:text="@{viewModel.employee.employeeName}"
             android:textSize="20sp"
@@ -60,6 +64,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="16dp"
+            android:weightSum="2"
             app:layout_constraintTop_toBottomOf="@+id/layoutId">
 
             <TextView
@@ -69,9 +74,12 @@
                 android:text="@string/salary" />
 
 
-            <TextView
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/editTextSalary"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="@{viewModel.isEdit}"
                 android:text="@{viewModel.employee.employeeSalary}" />
 
         </LinearLayout>
@@ -82,6 +90,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="16dp"
+            android:weightSum="2"
             app:layout_constraintTop_toBottomOf="@+id/guideline3">
 
             <TextView
@@ -92,8 +101,9 @@
 
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@{viewModel.employee.id}" />
 
         </LinearLayout>
@@ -104,6 +114,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="16dp"
+            android:weightSum="2"
             app:layout_constraintTop_toBottomOf="@+id/layoutSalary">
 
             <TextView
@@ -113,9 +124,12 @@
                 android:text="@string/employee_age" />
 
 
-            <TextView
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/editTextAge"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="@{viewModel.isEdit}"
                 android:text="@{viewModel.employee.employeeAge}" />
 
         </LinearLayout>
@@ -124,16 +138,17 @@
             android:id="@+id/lyrButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:onClick="@{(v)->viewModel.deleteEmployee()}"
                 android:text="Delete"
                 android:textAllCaps="false" />
 
@@ -141,7 +156,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="Update"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:onClick="@{(v)->viewModel.setEdit()}"
+                android:text="@{viewModel.isEdit() ? @string/update : @string/edit}"
                 android:textAllCaps="false" />
         </LinearLayout>
 

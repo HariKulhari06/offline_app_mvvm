@@ -54,16 +54,13 @@ public class Employee implements Serializable {
     @ColumnInfo(name = "profile_image")
     public String profileImage;
 
-
-    public Employee() {
-    }
-
+    public Employee() {}
 
     public String getEmployeeSalary() {
-        return employeeSalary + " $";
+        return employeeSalary ;
     }
 
     public String getEmployeeAge() {
-        return employeeAge + " Years";
+        return employeeAge ;
     }
 }

@@ -4,4 +4,9 @@
     <string name="salary">salary</string>
     <string name="employee_age">Employee Age</string>
     <string name="employee_id">Employee ID</string>
+
+    <string name="update">Update</string>
+    <string name="edit">Edit</string>
+
+
 </resources>

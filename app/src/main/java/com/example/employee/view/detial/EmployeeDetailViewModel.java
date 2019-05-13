@@ -1,5 +1,7 @@
 package com.example.employee.view.detial;
 
+import androidx.databinding.ObservableBoolean;
+
 import com.example.employee.data.DataManager;
 import com.example.employee.data.local.model.Employee;
 import com.example.employee.utils.rx.SchedulerProvider;
@@ -13,9 +15,22 @@ import io.reactivex.functions.Function;
 public class EmployeeDetailViewModel extends BaseViewModel<EmployeDetailNavigator> {
 
     private Employee mEmployee;
+    private ObservableBoolean edit = new ObservableBoolean();
+    private ObservableBoolean showProgress = new ObservableBoolean();
+
 
     public EmployeeDetailViewModel(DataManager dataManager, SchedulerProvider schedulerProvider) {
         super(dataManager, schedulerProvider);
+        edit.set(false);
+        setShowProgress(false);
+    }
+
+    public ObservableBoolean getShowProgress() {
+        return showProgress;
+    }
+
+    public void setShowProgress(boolean showProgress) {
+        this.showProgress.set(showProgress);
     }
 
     public Employee getEmployee() {
@@ -26,34 +41,47 @@ public class EmployeeDetailViewModel extends BaseViewModel<EmployeDetailNavigato
         mEmployee = employee;
     }
 
-    void deleteEmployee() {
+
+    public ObservableBoolean isEdit() {
+        return edit;
+    }
+
+    public void setEdit() {
+        if (isEdit().get()) {
+            getNavigator().updateEmployee();
+        } else {
+            edit.set(true);
+        }
+    }
+
+    public void deleteEmployee() {
         getCompositeDisposable().add(getDataManager().deleteEmployeeFromServer(getEmployee().id)
-                .flatMap(new Function<JSONObject, SingleSource<?>>() {
-                    @Override
-                    public SingleSource<?> apply(JSONObject jsonObject) throws Exception {
-                        return getDataManager().deleteByEmployeeId(getEmployee().id);
-                    }
-                }).subscribeOn(getSchedulerProvider().io())
+                .flatMap((Function<JSONObject, SingleSource<?>>) jsonObject -> getDataManager().deleteByEmployeeId(getEmployee().id)).subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(o -> getNavigator().onEmployeeDelete(), throwable -> getNavigator().handleError(throwable)));
     }
 
 
-    void UpdateEmployee() {
-        getEmployee().employeeName = "hari Singh Kulhari";
-        getCompositeDisposable().add(getDataManager().updateEmployeeAtServer(getEmployee())
-                .flatMap(new Function<Employee, SingleSource<?>>() {
-                    @Override
-                    public SingleSource<?> apply(Employee employee) throws Exception {
-                        getEmployee().employeeName = employee.employeeName;
-                        getEmployee().employeeAge = employee.employeeAge;
-                        getEmployee().employeeSalary = employee.employeeSalary;
-                        return getDataManager().insertEmployee(getEmployee());
-                    }
+    void doUpdateEmployee(Employee emp) {
+        setShowProgress(true);
+        getCompositeDisposable().add(getDataManager().updateEmployeeAtServer(emp)
+                .flatMap((Function<Employee, SingleSource<?>>) employee -> {
+                    setEmployee(emp);
+                    getEmployee().employeeName = employee.employeeName;
+                    getEmployee().employeeAge = employee.employeeAge;
+                    getEmployee().employeeSalary = employee.employeeSalary;
+                    return getDataManager().insertEmployee(emp);
                 })
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(o -> getNavigator().onEmployeeUpdate(getEmployee()), throwable -> getNavigator().handleError(throwable)));
+                .subscribe(o -> {
+                            setShowProgress(false);
+                            edit.set(false);
+                        }, throwable -> {
+                            setShowProgress(false);
+                            getNavigator().handleError(throwable);
+                        }
+                ));
     }
 
 

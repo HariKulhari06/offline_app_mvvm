@@ -51,8 +51,6 @@ public class EmployeeDetailActivity extends BaseActivity<ActivityEmployeeDetialB
         getSupportActionBar().setTitle(viewModel.getEmployee().employeeName);
         binding.toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
-        // viewModel.deleteEmployee();
-        viewModel.UpdateEmployee();
 
     }
 
@@ -73,5 +71,16 @@ public class EmployeeDetailActivity extends BaseActivity<ActivityEmployeeDetialB
         binding.setViewModel(viewModel);
         getSupportActionBar().setTitle(viewModel.getEmployee().employeeName);
         Toast.makeText(this, "Employee Updated Successfully", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updateEmployee() {
+        Employee employee = new Employee();
+        employee.id = viewModel.getEmployee().id;
+        employee.employeeSalary = binding.contentEmployeeDetil.editTextSalary.getText().toString().trim();
+        employee.employeeAge = binding.contentEmployeeDetil.editTextAge.getText().toString().trim();
+        employee.employeeName = binding.contentEmployeeDetil.editTextEmployeeName.getText().toString().trim();
+
+        viewModel.doUpdateEmployee(employee);
     }
 }

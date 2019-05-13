@@ -1,13 +1,10 @@
 package com.example.employee.view.main;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,7 +28,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     EmployeeAdapter adapter;
 
     private ActivityMainBinding binding;
-    private SearchView searchView;
 
     @Override
     public int getBindingVariable() {
@@ -103,6 +99,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     @Override
     public void startListening() {
         viewModel.getListLiveData().observe(this, employees -> adapter.submitList(employees));
+    }
+
+    @Override
+    public void setRefresh(boolean refresh) {
+        binding.contentMain.swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
