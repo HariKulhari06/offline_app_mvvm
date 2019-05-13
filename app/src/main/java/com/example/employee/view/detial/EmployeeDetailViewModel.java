@@ -55,10 +55,18 @@ public class EmployeeDetailViewModel extends BaseViewModel<EmployeDetailNavigato
     }
 
     public void deleteEmployee() {
+        setShowProgress(true);
         getCompositeDisposable().add(getDataManager().deleteEmployeeFromServer(getEmployee().id)
                 .flatMap((Function<JSONObject, SingleSource<?>>) jsonObject -> getDataManager().deleteByEmployeeId(getEmployee().id)).subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(o -> getNavigator().onEmployeeDelete(), throwable -> getNavigator().handleError(throwable)));
+                .subscribe(o -> {
+                    setShowProgress(false);
+                    getNavigator().onEmployeeDelete();
+
+                }, throwable -> {
+                    setShowProgress(false);
+                    getNavigator().handleError(throwable);
+                }));
     }
 
 
